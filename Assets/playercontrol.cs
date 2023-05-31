@@ -10,8 +10,9 @@ public class playercontrol : MonoBehaviour
     [SerializeField] private float rotationSpeed = 100f;
     [SerializeField] private WheelCollider[] wheelColliders;
     [SerializeField] private Transform[] wheelTransforms;
-   private float moveInput;
-     private float rotationInput;
+
+    private float moveInput;
+    private float rotationInput;
 
     private float currentSpeed;
 
@@ -33,7 +34,9 @@ public class playercontrol : MonoBehaviour
         rb.velocity = transform.forward * currentSpeed;
 
         // Rotate the player
-        rb.angularVelocity = new Vector3(0f, rotationInput * currentSpeed, 0f);
+        float rotationAmount = rotationInput * rotationSpeed * Time.fixedDeltaTime;
+        Quaternion rotation = Quaternion.Euler(0f, rotationAmount, 0f);
+        rb.MoveRotation(rb.rotation * rotation);
 
         // Rotate the wheels
         for (int i = 0; i < wheelColliders.Length; i++)
@@ -44,7 +47,9 @@ public class playercontrol : MonoBehaviour
             Vector3 wheelPosition;
             wheelColliders[i].GetWorldPose(out wheelPosition, out wheelRotation);
 
-            wheelTransforms[i].rotation = Quaternion.Euler(0f, rotationInput * 45f, 0f);
+            // Apply wheel rotation based on the car's rotation
+            wheelRotation *= Quaternion.Euler(0f, rotationAmount, 0f);
+            wheelTransforms[i].rotation = wheelRotation;
         }
     }
 
