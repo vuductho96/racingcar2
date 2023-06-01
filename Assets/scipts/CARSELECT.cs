@@ -46,7 +46,8 @@ public class CARSELECT : MonoBehaviour
     {
         PlayerPrefs.SetInt("CarIndex", currentIndex);
         PlayerPrefs.Save();
-        SceneManager.LoadScene("GamePlay");
+        SceneManager.LoadScene("LoadingSence" +
+            "");
     }
 
 }
